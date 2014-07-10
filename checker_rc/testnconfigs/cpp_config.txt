@@ -1,0 +1,1 @@
+"C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\VC\\vcvarsall.bat" & cl /W4 /F268435456 /EHsc /FoRelease /O2 /Fe$2 $1

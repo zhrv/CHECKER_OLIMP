@@ -1,0 +1,8 @@
+problem_list:
+1
+C:\\vs\\checker_rc\\checker_rc\\testnconfigs\\a_conf.txt
+language_list:
+cpp
+C:\\vs\\checker_rc\\checker_rc\\testnconfigs\\cpp_config.txt
+pas
+C:\\vs\\checker_rc\\checker_rc\\testnconfigs\\pas_config.txt
