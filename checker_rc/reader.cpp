@@ -1,4 +1,5 @@
 #include "reader.h"
+#include "rapidjson/document.h"
 
 namespace checker {
 
@@ -55,7 +56,7 @@ test_element::test_element() : quest(), answer_list() { }
 //test_path_nballs_element: адреса вопроса и валидных ответов.
 test_path_nballs_element::test_path_nballs_element()
 {
-	balls = 0;
+	scores = 0;
 	quest_file.clear();
 	answer_path_list.clear();
 }
@@ -107,7 +108,7 @@ test_element& test_reader::read(const std::string& quest_file, const std::list<s
 
 //config_reader: читает все конфинурации из файла.
 
-config_reader::config_reader(): problems()
+config_reader::config_reader()/*: problems()*/
 {
 	state = state_in::UNKNOWN;
 }
@@ -133,18 +134,109 @@ void config_reader::read_file(const std::string& file_path, std::string& file_co
 		
 	file.close();
 }
-
+/*
 bool config_reader::empty()
 {
 	return problems.empty();
 }
-
+*/
+/*
 problem_store& config_reader::get_problem_config()
 {
 	return problems;
 }
-
+*/
 //парсит главный файл конфигов.
+bool config_reader::read_main_config(const std::string& main_config_file_path, std::string& compiler_command_template, std::string& compiler_name, problem_store& problem) {
+	std::string main_config;
+	read_file(main_config_file_path, main_config);
+	const char *json = main_config.c_str();
+
+	rapidjson::Document document;
+	document.Parse(json);
+	
+	//problem
+	assert(document.HasMember("problem"));
+	const rapidjson::Value& pv = document["problem"];
+	assert(pv.IsObject());
+	
+	assert(pv.HasMember("name"));
+	assert(pv["name"].IsString());
+	std::string problem_name = pv["name"].GetString();	// name
+
+	assert(pv.HasMember("config"));
+	const rapidjson::Value& cv = pv["config"];
+	assert(cv.IsObject());
+
+	assert(cv.HasMember("time_limit"));
+	assert(cv["time_limit"].IsUint());
+	problem.time_limit = cv["time_limit"].GetUint(); // time_limit
+
+	assert(cv.HasMember("memory_limit"));
+	assert(cv["memory_limit"].IsUint());
+	problem.memory_limit = cv["memory_limit"].GetUint(); // memory_limit
+
+	assert(cv.HasMember("input"));
+	assert(cv["input"].IsString());
+	problem.input_file_name = cv["input"].GetString(); // input
+
+	assert(cv.HasMember("output"));
+	assert(cv["output"].IsString());
+	problem.output_file_name = cv["output"].GetString(); // output
+
+	assert(cv.HasMember("test_dir"));
+	assert(cv["test_dir"].IsString());
+	std::string test_dir = cv["test_dir"].GetString(); // test_dir
+
+	assert(cv.HasMember("checker"));
+	assert(cv["checker"].IsString());
+	problem.checker_file_path = restore_path(test_dir, cv["checker"].GetString()); //checker_file_path
+
+	assert(cv.HasMember("tests"));
+	const rapidjson::Value& testsv = cv["tests"];
+	assert(testsv.IsArray());
+	rapidjson::SizeType testsv_size = testsv.Size();
+	for (rapidjson::SizeType i = 0; i < testsv_size; ++i) {
+		const rapidjson::Value& tv = testsv[i];
+		test_path_nballs_element e;
+		
+		assert(tv.HasMember("scores"));
+		assert(tv["scores"].IsInt());
+		e.scores = tv["scores"].GetInt(); // scores
+		
+		assert(tv.HasMember("input"));
+		assert(tv["input"].IsString());
+		e.quest_file = restore_path(test_dir, tv["input"].GetString()); // input
+		
+		assert(tv.HasMember("outputs"));
+		const rapidjson::Value& outsv = tv["outputs"];
+		assert(outsv.IsArray());
+		rapidjson::SizeType outsv_size = outsv.Size();
+		for (rapidjson::SizeType j = 0; j < outsv_size; ++j) {
+			const rapidjson::Value& ov = outsv[j];
+			assert(ov.IsString());
+			e.answer_path_list.push_back(restore_path(test_dir, ov.GetString())); // add to outputs
+		} // outputs
+		problem.test_path_list.push_back(e);
+	}										// test
+	
+
+	//language
+	assert(document.HasMember("language"));
+	const rapidjson::Value& lv = document["language"];
+	assert(lv.IsObject());
+
+	assert(lv.HasMember("name"));
+	assert(lv["name"].IsString());
+	compiler_name = lv["name"].GetString(); // name
+
+	assert(lv.HasMember("template"));
+	assert(lv["template"].IsString());
+	compiler_command_template = lv["template"].GetString(); // template
+
+	return true;
+}
+/*
 bool config_reader::read_main_config(const std::string& main_config_file_path, const std::string& problem_name, const std::string& compiler_name, std::string& problem_config_path, std::string& compiler_config)
 {
 	const std::string problem_list_str  = "problem_list:";
@@ -186,7 +278,8 @@ bool config_reader::read_main_config(const std::string& main_config_file_path, c
 
 	return !compiler_config.empty() && !problem_config_path.empty();
 }
-
+*/
+/*
 //todo:	бажная проверка валидности и синтаксис чек.
 //read: читает из файла в структуру данные, в которых ограничения по времени, памяти, исполняемый файл проверяемой программы, 
 //		имя файля подающегосяхся ему на вход и имя файла создаваемое тестируемой программой, а так же адреса тестовых файлов.
@@ -280,5 +373,5 @@ bool config_reader::read_problem_config(const std::string& configFile)
 		
 	return !empty();
 }
-
+*/
 } // namespace checker

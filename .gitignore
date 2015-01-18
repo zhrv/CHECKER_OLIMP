@@ -46,5 +46,6 @@ Test*/*
 *.opensdf
 *.sdf
 *.suo
+*.obj
 checker_rc/Release/
 checker_rc/Debug/

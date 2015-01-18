@@ -21,9 +21,7 @@ struct verdict {
 	std::string		report;
 };
 
-void check(const std::string& main_config_file_path, const std::string& problem_name, 
-		   const std::string& compiler_name, const std::string& profile_path,
-		   const std::string& source_name, std::string& report_str);
+void check(const std::string& main_config_file_path, const std::string& profile_path, const std::string& source_name, std::string& report_str);
 
 } // namespace checker
 
