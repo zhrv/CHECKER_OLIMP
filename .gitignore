@@ -43,3 +43,8 @@ ipch/*
 Release/*
 Test*/*
 *.vcxproj.user
+*.opensdf
+*.sdf
+*.suo
+checker_rc/Release/
+checker_rc/Debug/
