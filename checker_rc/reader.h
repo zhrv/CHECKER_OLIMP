@@ -9,6 +9,8 @@
 #include <cstdlib>
 #include "windows.h"
 
+#include "rapidjson/document.h"
+
 namespace checker {
 
 //get_full_path_name: преобразование из относительного пути в абсолютный.
@@ -66,8 +68,6 @@ private:
 		Re,
 		UNKNOWN
 	}	state;
-private:
-	//problem_store	problems;
 public:
 	config_reader();
 private:
@@ -75,17 +75,8 @@ private:
 private:
 	void read_file(const std::string& file_path, std::string& file_content);
 public:
-	//bool empty();
-	//problem_store& get_problem_config();
-public:
 	//парсит главный файл конфигов.
 	bool read_main_config(const std::string& main_config_file_path, std::string& compiler_command_template, std::string& compiler_name, problem_store& problem);
-
-	//bool read_main_config(const std::string& main_config_file_path, const std::string& problem_name, const std::string& compiler_name, std::string& problem_config_path, std::string& compiler_config);
-	//todo:	бажная проверка валидности и синтаксис чек.
-	//read: читает из файла в структуру данные, в которых ограничения по времени, памяти, исполняемый файл проверяемой программы, 
-	//		имя файля подающегосяхся ему на вход и имя файла создаваемое тестируемой программой, а так же адреса тестовых файлов.
-	//bool read_problem_config(const std::string& configFile);
 };
 
 } // namespace checker
