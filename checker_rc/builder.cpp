@@ -154,8 +154,6 @@ bool build_from_source(const std::string& profile_path, const std::string& sourc
 			return false;
 		}
 
-		//std::cout<< std::endl << "[" << buffer_str << "]" << std::endl;
-
 		if (feof(pipe))							_pclose(pipe);
 		else									return false; // assert(false);
 

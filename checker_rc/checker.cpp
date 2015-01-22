@@ -3,33 +3,41 @@
 namespace checker {
 
 /*
-		{
-			"problem": {
-				"name": "problem_a",
-				"config": {
-					"time_limit": 1000,
-					"memory_limit": 31457280,
-					"input": "race.in",
-					"output": "race.out",
-					"test_dir": "C:\\Users\\vs\\checker_rc\\testnconfigs\\problem_a\\",
-					"checker": "check.exe",
-					"tests": [
-						{
-							"scores": 10,
-							"input": "01",
-							"outputs": [
-								"01.a",
-								"01_2.a"
-							]
-						}
-					]
-				}
-			},
-			"language": {
-				"name": "cpp",
-				"template": "\"C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\VC\\vcvarsall.bat\" & cl /W4 /F268435456 /EHsc /FoRelease /O2 /Fe$2 $1"
+	{
+		"problem": {
+			"name": "problem_a",
+			"config": {
+				"time_limit": 1000,
+				"memory_limit": 31457280,
+				"input": "race.in",
+				"output": "race.out",
+				"test_dir": "C:\\Users\\nill\\checker_rc\\testnconfigs\\a_tests",
+				"checker": "check.exe",
+				"tests": [
+					{
+						"id": 123,
+						"scores": 10,
+						"input": "01",
+						"outputs": [
+							"01.a"
+						]
+					},
+					{
+						"id": 321,
+						"scores": 10,
+						"input": "02",
+						"outputs": [
+							"02.a"
+						]
+					}
+				]
 			}
+		},
+		"language": {
+		"name": "msv_cpp",
+		"template": "\"C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\VC\\vcvarsall.bat\" & cl /W4 /F268435456 /EHsc /FoRelease /O2 /Fe$2 $1"
 		}
+	}
 */
 
 verdict check(const std::string& main_config_file_path, const std::string& profile_path, const std::string& source_name) {
