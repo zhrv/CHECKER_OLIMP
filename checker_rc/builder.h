@@ -10,6 +10,7 @@
 namespace checker {
 
 const static std::string msv_cpp = "msv_cpp";
+const static std::string mingw_cpp = "mingw_cpp";
 const static std::string fp_pas = "fp_pas";
 const static std::string abc_pas = "abc_pas";
 

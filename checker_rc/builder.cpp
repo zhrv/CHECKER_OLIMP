@@ -15,7 +15,7 @@ void parse_compiler_config(const std::string& profile_path, const std::string& s
 						   std::string& compiler_command
 						   )
 {
-	if (compiler_name == msv_cpp) {
+	if (compiler_name == msv_cpp || compiler_name == mingw_cpp) {
 		const std::string d1_str = "$1";
 		const std::string d2_str = "$2";
 		const std::string exe_str = ".exe";
@@ -130,6 +130,35 @@ bool build_from_source(const std::string& profile_path, const std::string& sourc
 		return true;
 	}
 	else if (compiler_name == abc_pas) {
+		return true;
+	}
+	else if (compiler_name == mingw_cpp) {
+		const std::string error_str = "error:";
+		const std::string	exe_str = ".exe";
+
+		FILE				*pipe;
+		std::string			compiler_command;
+		const int			buffer_size = 512;
+		char				buffer[buffer_size];
+		std::string			buffer_str;
+
+		parse_compiler_config(profile_path, source_name, compiler_name, compiler_config, compiler_command);
+
+		pipe = _popen((compiler_command + " 2>&1").c_str(), "rt");
+		if (pipe == nullptr)						return false;
+
+		if (!buffer_str.empty())				buffer_str.clear();
+		while (fgets(buffer, buffer_size, pipe) != nullptr) {
+			buffer_str += buffer;
+		}
+
+		if (feof(pipe))							_pclose(pipe);
+		else									return false; // assert(false);
+		
+		auto it = buffer_str.find(error_str);
+		if (it != std::string::npos)			return false;
+
+		executable_file_path = restore_path(profile_path, source_name + exe_str);
 		return true;
 	}
 
