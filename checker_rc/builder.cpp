@@ -130,6 +130,51 @@ bool build_from_source(const std::string& profile_path, const std::string& sourc
 		return true;
 	}
 	else if (compiler_name == abc_pas) {
+		const std::string	ok_str = "OK";
+		const std::string	pas_str = ".pas";
+		const std::string	exe_str = ".exe";
+		std::string			compiler_command;
+		std::string			buffer_str;
+		const int			buffer_size = 512;
+		char				buffer[buffer_size];
+		FILE				*pipe;
+
+		parse_compiler_config(profile_path, source_name, compiler_name, compiler_config, compiler_command);
+
+		pipe = _popen(compiler_command.c_str(), "rt");
+		if (pipe == nullptr)						return false;
+
+		if (!buffer_str.empty())				buffer_str.clear();
+		while (fgets(buffer, buffer_size, pipe) != nullptr) {
+			buffer_str += buffer;
+		}
+
+		if (buffer_str.empty()) {
+			assert(false);
+			return false;
+		}
+
+		//std::cout<< std::endl << "[" << buffer_str << "]" << std::endl;
+
+		if (feof(pipe))							_pclose(pipe);
+		else									return false; // assert(false);
+
+		auto it = buffer_str.find(ok_str, 0);
+		if (it == std::string::npos)			return false;
+		it = buffer_str.find(ok_str, it + ok_str.length());
+		if (it == std::string::npos)			return false;
+
+		buffer_str = source_name;
+		if (buffer_str.length() < 5
+			&& (buffer_str[buffer_str.length() - 1] != 's'
+				|| buffer_str[buffer_str.length() - 2] != 'a'
+				|| buffer_str[buffer_str.length() - 3] != 'p'
+				|| buffer_str[buffer_str.length() - 4] != '.'
+				)
+			)									return false;
+
+		buffer_str.resize(buffer_str.length() - pas_str.length());
+		executable_file_path = restore_path(profile_path, buffer_str + exe_str);
 		return true;
 	}
 	else if (compiler_name == mingw_cpp) {
