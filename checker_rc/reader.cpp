@@ -55,6 +55,7 @@ test_element::test_element() : quest(), answer_list() { }
 //test_path_nballs_element: адреса вопроса и валидных ответов.
 test_path_nballs_element::test_path_nballs_element()
 {
+	id = -1;
 	scores = 0;
 	quest_file.clear();
 	answer_path_list.clear();
@@ -188,6 +189,10 @@ bool config_reader::read_main_config(const std::string& main_config_file_path, s
 		const rapidjson::Value& tv = testsv[i];
 		test_path_nballs_element e;
 		
+		assert(tv.HasMember("id"));
+		assert(tv["id"].IsUint64());
+		e.id = tv["id"].GetUint64(); // id
+
 		assert(tv.HasMember("scores"));
 		assert(tv["scores"].IsInt());
 		e.scores = tv["scores"].GetInt(); // scores

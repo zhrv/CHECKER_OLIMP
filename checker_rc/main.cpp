@@ -22,11 +22,11 @@ int main(int argc, char *argv[])
 	checker::get_full_path_name(argv[1], main_config_file_path);
 	checker::get_full_path_name(argv[2], profile_path);
 	source_name				=	argv[3];
-	
+
 	/*
 	//checker_rc.exe C:\\Users\\nill\\checker_rc\\testnconfigs\\config.json c:\\Users\\nill\\checker_rc\\users\\1\\1\\ main.cpp
-	checker::get_full_path_name("C:\\Users\\nill\\checker_rc\\testnconfigs\\config.json", main_config_file_path);
-	checker::get_full_path_name("c:\\Users\\nill\\checker_rc\\users\\1\\1\\", profile_path);
+	checker::get_full_path_name("C:\\Users\\nill\\checker_rc\\users\\1\\1\\config.json", main_config_file_path);
+	checker::get_full_path_name("C:\\Users\\nill\\checker_rc\\users\\1\\1", profile_path);
 	source_name = "main.cpp";
 	*/
 	checker::verdict v = checker::check(main_config_file_path, profile_path, source_name);

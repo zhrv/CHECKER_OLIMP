@@ -9,6 +9,10 @@
 
 namespace checker {
 
+const static std::string msv_cpp = "msv_cpp";
+const static std::string fp_pas = "fp_pas";
+const static std::string abc_pas = "abc_pas";
+
 //parse_compiler_config: распарсить конфиги указанного компилятора.
 //						 на текущий момент сделано только для  MSVS2012 C++.
 //todo: требует доработки.

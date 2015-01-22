@@ -77,20 +77,20 @@ verdict check(const std::string& main_config_file_path, const std::string& profi
 				*it->answer_path_list.begin(),
 				restore_path(profile_path, problems.output_file_name),
 				restore_path(profile_path, source_name + "testlib_checker.report"))) {
-				result.report.push_back(report_elem("bad", request_el.time_out, request_el.memory, 0));
+				result.report.push_back(report_elem("bad", it->id, request_el.time_out, request_el.memory, 0));
 			}
 			else {
-				result.report.push_back(report_elem("ok", request_el.time_out, request_el.memory, it->scores));
+				result.report.push_back(report_elem("ok", it->id, request_el.time_out, request_el.memory, it->scores));
 			}
 			break;
 		case TLE:
-			result.report.push_back(report_elem("tle", -1, request_el.memory, 0));
+			result.report.push_back(report_elem("tle", it->id, -1, request_el.memory, 0));
 			break;
 		case MLE:
-			result.report.push_back(report_elem("mle", request_el.time_out, -1, 0));
+			result.report.push_back(report_elem("mle", it->id, request_el.time_out, -1, 0));
 			break;
 		default:
-			result.report.push_back(report_elem("crash", -1, -1, 0));
+			result.report.push_back(report_elem("crash", it->id, -1, -1, 0));
 		}
 		//**************************************************************//		
 	}
@@ -110,6 +110,8 @@ std::string serizlize(const verdict& v) {
 	writer.StartArray();
 	for (auto it = v.report.begin(); it != v.report.end(); ++it) {
 		writer.StartObject();
+		writer.String("id");
+		writer.Uint64(it->id);
 		writer.String("result");
 		writer.String(it->result.c_str());
 		writer.String("time");

@@ -31,6 +31,7 @@ struct test_element {
 
 //test_path_nballs_element: адреса вопроса и валидных ответов.
 struct test_path_nballs_element {
+	size_t						id;
 	int							scores;
 	std::string					quest_file;
 	std::list<std::string>		answer_path_list;
