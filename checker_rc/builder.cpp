@@ -2,6 +2,10 @@
 
 namespace checker {
 
+const static std::string msv_cpp = "msv_cpp";
+const static std::string fp_pas = "fp_pas";
+const static std::string abc_pas = "abc_pas";
+
 //parse_compiler_config: распарсить конфиги указанного компилятора.
 //						 на текущий момент сделано только для  MSVS2012 C++.
 //todo: требует доработки.
@@ -15,7 +19,7 @@ void parse_compiler_config(const std::string& profile_path, const std::string& s
 						   std::string& compiler_command
 						   )
 {
-	if (compiler_name == "cpp") {
+	if (compiler_name == msv_cpp) {
 		const std::string d1_str = "$1";
 		const std::string d2_str = "$2";
 		const std::string exe_str = ".exe";
@@ -30,7 +34,7 @@ void parse_compiler_config(const std::string& profile_path, const std::string& s
 		if (it == std::string::npos)	assert(false);
 		compiler_command.replace(it, d1_str.length(), restore_path(profile_path, source_name + exe_str));
 	} 
-	if (compiler_name == "pas") {
+	if (compiler_name == fp_pas || compiler_name == abc_pas) {
 		const std::string d1_str = "$1";
 
 		compiler_command = compiler_config;
@@ -45,7 +49,7 @@ void parse_compiler_config(const std::string& profile_path, const std::string& s
 //					 на текущий момент сделано только для  MSVS2012 C++.
 bool build_from_source(const std::string& profile_path, const std::string& source_name, const std::string& compiler_name, const std::string& compiler_config, std::string& executable_file_path)
 {
-	if (compiler_name == "cpp") {
+	if (compiler_name == msv_cpp) {
 		const std::string	out_str = "/out:";
 		const std::string   fatal_error_str = "fatal error";
 		std::string			compiler_command;
@@ -83,7 +87,8 @@ bool build_from_source(const std::string& profile_path, const std::string& sourc
 		}
 
 		return true;
-	} else if (compiler_name == "pas") {
+	}
+	else if (compiler_name == fp_pas) {
 		const std::string	fatal_str = "Fatal:";
 		const std::string	exe_str = ".exe";
 		const std::string	pas_str = ".pas";
@@ -126,6 +131,9 @@ bool build_from_source(const std::string& profile_path, const std::string& sourc
 		buffer_str.resize(buffer_str.length() - pas_str.length());
 		executable_file_path = restore_path(profile_path, buffer_str + exe_str);
 
+		return true;
+	}
+	else if (compiler_name == abc_pas) {
 		return true;
 	}
 
