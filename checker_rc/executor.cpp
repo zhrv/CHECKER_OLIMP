@@ -190,7 +190,7 @@ namespace checker {
 		remove_in_out_files();
 
 		if (make_input_file(quest) == false) {
-			request_report.correct = CCTF;						// assert(false);
+			request_report.correct = CCTF;						// checker_assert(false);
 			return request_report;								// возможно нужно кинуть exception.
 		}
 		
@@ -259,7 +259,7 @@ namespace checker {
 		size_t						return_code	 = 0;
 		std::string					application_name, application_directory;
 		
-		assert(!(program_path.length() == 0));
+		checker_assert(!(program_path.length() == 0));
 
 		checker::get_directory_and_file(program_path, application_directory, application_name);
 		

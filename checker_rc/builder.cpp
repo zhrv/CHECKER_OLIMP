@@ -23,11 +23,11 @@ void parse_compiler_config(const std::string& profile_path, const std::string& s
 		compiler_command = compiler_config;
 
 		auto it = compiler_command.find(d1_str);
-		if (it == std::string::npos)	assert(false);
+		if (it == std::string::npos)	checker_assert(false);
 		compiler_command.replace(it, d1_str.length(), restore_path(profile_path, source_name));
 
 		it = compiler_command.find(d2_str);
-		if (it == std::string::npos)	assert(false);
+		if (it == std::string::npos)	checker_assert(false);
 		compiler_command.replace(it, d1_str.length(), restore_path(profile_path, source_name + exe_str));
 	} 
 	if (compiler_name == fp_pas || compiler_name == abc_pas) {
@@ -36,7 +36,7 @@ void parse_compiler_config(const std::string& profile_path, const std::string& s
 		compiler_command = compiler_config;
 		
 		auto it = compiler_command.find(d1_str);
-		if (it == std::string::npos)	assert(false);
+		if (it == std::string::npos)	checker_assert(false);
 		compiler_command.replace(it, d1_str.length(), restore_path(profile_path, source_name));
 	}
 }
@@ -65,7 +65,7 @@ bool build_from_source(const std::string& profile_path, const std::string& sourc
 		}
 
 		if (feof(pipe))	_pclose(pipe);
-		else			return false; // assert(false);
+		else			return false; // checker_assert(false);
 
 		auto it = buffer_str.find(fatal_error_str);
 		if (it != std::string::npos)			return false;
@@ -105,12 +105,12 @@ bool build_from_source(const std::string& profile_path, const std::string& sourc
 		}
 		
 		if (buffer_str.empty()) {
-			assert(false);
+			checker_assert(false);
 			return false;
 		}
 
 		if (feof(pipe))							_pclose(pipe);
-		else									return false; // assert(false);
+		else									return false; // checker_assert(false);
 
 		auto it = buffer_str.find(fatal_str);
 		if (it != std::string::npos)			return false;
@@ -150,12 +150,12 @@ bool build_from_source(const std::string& profile_path, const std::string& sourc
 		}
 
 		if (buffer_str.empty()) {
-			assert(false);
+			checker_assert(false);
 			return false;
 		}
 
 		if (feof(pipe))							_pclose(pipe);
-		else									return false; // assert(false);
+		else									return false; // checker_assert(false);
 
 		auto it = buffer_str.find(ok_str, 0);
 		if (it == std::string::npos)			return false;
@@ -196,7 +196,7 @@ bool build_from_source(const std::string& profile_path, const std::string& sourc
 		}
 
 		if (feof(pipe))							_pclose(pipe);
-		else									return false; // assert(false);
+		else									return false; // checker_assert(false);
 		
 		auto it = buffer_str.find(error_str);
 		if (it != std::string::npos)			return false;
@@ -205,7 +205,7 @@ bool build_from_source(const std::string& profile_path, const std::string& sourc
 		return true;
 	}
 
-	assert(false);
+	checker_assert(false);
 	return false;
 }
 

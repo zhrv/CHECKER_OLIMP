@@ -2,7 +2,7 @@
 #define _EXECUTOR_
 
 #include <cstdio>
-#include <cassert>
+#include "checker_assert.h"
 #include <fstream>
 #include <string>
 #include <cmath>

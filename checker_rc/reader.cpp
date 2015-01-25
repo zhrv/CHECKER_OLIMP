@@ -14,7 +14,7 @@ void get_full_path_name(const TCHAR *path, std::string& full_path)
 					lppPart);  
 
 	full_path.assign(buff);
-	assert(retval);
+	checker_assert(retval);
 }
 
 void get_directory_and_file(std::string path, std::string& directory_path, std::string& file_name)
@@ -27,7 +27,7 @@ void get_directory_and_file(std::string path, std::string& directory_path, std::
 		if (path[pos] == '\\')	break;
 	}
 	if (pos != 0 && pos < path.length()-1)	file_name = path.substr(pos+1);
-	else									assert(false);
+	else									checker_assert(false);
 	directory_path = path.substr(0, pos);
 }
 
@@ -81,7 +81,7 @@ test_element& test_reader::read(const std::string& quest_file, const std::list<s
 	std::ifstream	file;
 		
 	file.open(quest_file);
-	assert(file);
+	checker_assert(file);
 
 	test.quest.clear();
 	test.answer_list.clear();
@@ -94,7 +94,7 @@ test_element& test_reader::read(const std::string& quest_file, const std::list<s
 		
 	for (std::list<std::string>::const_iterator i = answer_file_list.begin(); i != answer_file_list.end(); ++i) {
 		file.open(*i);
-		assert(file);
+		checker_assert(file);
 		answer.clear();
 		while (file.get(ch)) {
 			answer += ch;
@@ -126,7 +126,7 @@ void config_reader::read_file(const std::string& file_path, std::string& file_co
 	std::ifstream		file(file_path);
 	char				ch;
 
-	if (!file)			assert(false);
+	if (!file)			checker_assert(false);
 		
 	if (!file_content.empty())	file_content.clear();
 
@@ -145,69 +145,69 @@ bool config_reader::read_main_config(const std::string& main_config_file_path, s
 	document.Parse(json);
 	
 	//problem
-	assert(document.HasMember("problem"));
+	checker_assert(document.HasMember("problem"));
 	const rapidjson::Value& pv = document["problem"];
-	assert(pv.IsObject());
+	checker_assert(pv.IsObject());
 	
-	assert(pv.HasMember("name"));
-	assert(pv["name"].IsString());
+	checker_assert(pv.HasMember("name"));
+	checker_assert(pv["name"].IsString());
 	std::string problem_name = pv["name"].GetString();	// name
 
-	assert(pv.HasMember("config"));
+	checker_assert(pv.HasMember("config"));
 	const rapidjson::Value& cv = pv["config"];
-	assert(cv.IsObject());
+	checker_assert(cv.IsObject());
 
-	assert(cv.HasMember("time_limit"));
-	assert(cv["time_limit"].IsUint());
+	checker_assert(cv.HasMember("time_limit"));
+	checker_assert(cv["time_limit"].IsUint());
 	problem.time_limit = cv["time_limit"].GetUint(); // time_limit
 
-	assert(cv.HasMember("memory_limit"));
-	assert(cv["memory_limit"].IsUint());
+	checker_assert(cv.HasMember("memory_limit"));
+	checker_assert(cv["memory_limit"].IsUint());
 	problem.memory_limit = cv["memory_limit"].GetUint(); // memory_limit
 
-	assert(cv.HasMember("input"));
-	assert(cv["input"].IsString());
+	checker_assert(cv.HasMember("input"));
+	checker_assert(cv["input"].IsString());
 	problem.input_file_name = cv["input"].GetString(); // input
 
-	assert(cv.HasMember("output"));
-	assert(cv["output"].IsString());
+	checker_assert(cv.HasMember("output"));
+	checker_assert(cv["output"].IsString());
 	problem.output_file_name = cv["output"].GetString(); // output
 
-	assert(cv.HasMember("test_dir"));
-	assert(cv["test_dir"].IsString());
+	checker_assert(cv.HasMember("test_dir"));
+	checker_assert(cv["test_dir"].IsString());
 	std::string test_dir = cv["test_dir"].GetString(); // test_dir
 
-	assert(cv.HasMember("checker"));
-	assert(cv["checker"].IsString());
+	checker_assert(cv.HasMember("checker"));
+	checker_assert(cv["checker"].IsString());
 	problem.checker_file_path = restore_path(test_dir, cv["checker"].GetString()); //checker_file_path
 
-	assert(cv.HasMember("tests"));
+	checker_assert(cv.HasMember("tests"));
 	const rapidjson::Value& testsv = cv["tests"];
-	assert(testsv.IsArray());
+	checker_assert(testsv.IsArray());
 	rapidjson::SizeType testsv_size = testsv.Size();
 	for (rapidjson::SizeType i = 0; i < testsv_size; ++i) {
 		const rapidjson::Value& tv = testsv[i];
 		test_path_nballs_element e;
 		
-		assert(tv.HasMember("id"));
-		assert(tv["id"].IsUint64());
+		checker_assert(tv.HasMember("id"));
+		checker_assert(tv["id"].IsUint64());
 		e.id = tv["id"].GetUint64(); // id
 
-		assert(tv.HasMember("scores"));
-		assert(tv["scores"].IsInt());
+		checker_assert(tv.HasMember("scores"));
+		checker_assert(tv["scores"].IsInt());
 		e.scores = tv["scores"].GetInt(); // scores
 		
-		assert(tv.HasMember("input"));
-		assert(tv["input"].IsString());
+		checker_assert(tv.HasMember("input"));
+		checker_assert(tv["input"].IsString());
 		e.quest_file = restore_path(test_dir, tv["input"].GetString()); // input
 		
-		assert(tv.HasMember("outputs"));
+		checker_assert(tv.HasMember("outputs"));
 		const rapidjson::Value& outsv = tv["outputs"];
-		assert(outsv.IsArray());
+		checker_assert(outsv.IsArray());
 		rapidjson::SizeType outsv_size = outsv.Size();
 		for (rapidjson::SizeType j = 0; j < outsv_size; ++j) {
 			const rapidjson::Value& ov = outsv[j];
-			assert(ov.IsString());
+			checker_assert(ov.IsString());
 			e.answer_path_list.push_back(restore_path(test_dir, ov.GetString())); // add to outputs
 		} // outputs
 		problem.test_path_list.push_back(e);
@@ -215,16 +215,16 @@ bool config_reader::read_main_config(const std::string& main_config_file_path, s
 	
 
 	//language
-	assert(document.HasMember("language"));
+	checker_assert(document.HasMember("language"));
 	const rapidjson::Value& lv = document["language"];
-	assert(lv.IsObject());
+	checker_assert(lv.IsObject());
 
-	assert(lv.HasMember("name"));
-	assert(lv["name"].IsString());
+	checker_assert(lv.HasMember("name"));
+	checker_assert(lv["name"].IsString());
 	compiler_name = lv["name"].GetString(); // name
 
-	assert(lv.HasMember("template"));
-	assert(lv["template"].IsString());
+	checker_assert(lv.HasMember("template"));
+	checker_assert(lv["template"].IsString());
 	compiler_command_template = lv["template"].GetString(); // template
 
 	return true;

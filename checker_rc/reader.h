@@ -1,7 +1,7 @@
 #ifndef _READER_
 #define _READER_
 
-#include <cassert>
+#include "checker_assert.h"
 #include <string>
 #include <list>
 #include <iostream>

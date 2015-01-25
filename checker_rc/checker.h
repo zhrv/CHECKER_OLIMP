@@ -5,7 +5,7 @@
 #include <list>
 #include <vector>
 #include <stack>
-#include <cassert>
+#include "checker_assert.h"
 
 #include <functional>
 

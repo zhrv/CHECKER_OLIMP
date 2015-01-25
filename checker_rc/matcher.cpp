@@ -64,14 +64,14 @@ bool answers_match(std::string quest_file_path, std::string answer_file_path, st
 	get_full_path_name(std::string(report_program_file_path).c_str(), report_program_file_path);
 	get_full_path_name(std::string(testlib_checker_report_file_path).c_str(), testlib_checker_report_file_path);
 
-	assert(is_file_exist(quest_file_path));
-	assert(is_file_exist(answer_file_path));
+	checker_assert(is_file_exist(quest_file_path));
+	checker_assert(is_file_exist(answer_file_path));
 
 	get_directory_and_file(quest_file_path, dir_tests, temp);
 	get_directory_and_file(answer_file_path, dir_temp, temp);
 
 	if (dir_tests != dir_temp) {
-		assert(false);
+		checker_assert(false);
 		return false;
 	}
 
@@ -82,7 +82,7 @@ bool answers_match(std::string quest_file_path, std::string answer_file_path, st
 	int return_code = executor::execute(check_path, argv);
 	if (!(return_code >= 0 && return_code <= 4)) {
 		fprintf(stderr, "with exit code = %d on quest_file_path = %s", return_code, quest_file_path.c_str());
-		assert(false);
+		checker_assert(false);
 		return false;
 	}
 	
@@ -90,7 +90,7 @@ bool answers_match(std::string quest_file_path, std::string answer_file_path, st
 	std::ifstream			file(testlib_checker_report_file_path);
 	char					ch;
 	if (!file) {
-		assert(false);
+		checker_assert(false);
 		return false;
 	}
 	while (file.get(ch)) 	testlib_checker_report += ch;

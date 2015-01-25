@@ -3,9 +3,10 @@
 #include <string>
 #include <list>
 #include <cstdlib>
-#include <cassert>
+#include "checker_assert.h"
 #include "checker.h"
 #include <windows.h>
+
 using namespace std;
 
 //todo: исправить ворнинги!
@@ -17,7 +18,7 @@ int main(int argc, char *argv[])
 	string			source_name;
 
 	if (argc != 4)	{
-		assert(false);		
+		checker_assert(false);		
 	}
 	checker::get_full_path_name(argv[1], main_config_file_path);
 	checker::get_full_path_name(argv[2], profile_path);

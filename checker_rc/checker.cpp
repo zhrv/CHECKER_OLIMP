@@ -50,7 +50,7 @@ verdict check(const std::string& main_config_file_path, const std::string& profi
 			
 	bool result_flag = false;
 	result_flag = reader.read_main_config(main_config_file_path, compiler_command_template, compiler_name, problems);
-	assert(result_flag);
+	checker_assert(result_flag);
 
 	std::string		executable_file_path;
 	result_flag = build_from_source(profile_path, source_name, compiler_name, compiler_command_template, executable_file_path);

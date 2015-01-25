@@ -3,7 +3,7 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include <cassert>
+#include "checker_assert.h"
 #include <string>
 #include "reader.h"
 

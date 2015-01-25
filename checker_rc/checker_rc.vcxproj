@@ -73,12 +73,14 @@
   <ItemGroup>
     <ClCompile Include="builder.cpp" />
     <ClCompile Include="checker.cpp" />
+    <ClCompile Include="checker_assert.cpp" />
     <ClCompile Include="executor.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="builder.h" />
     <ClInclude Include="checker.h" />
+    <ClInclude Include="checker_assert.h" />
     <ClInclude Include="executor.h" />
     <ClInclude Include="matcher.h" />
     <ClCompile Include="matcher.cpp" />
