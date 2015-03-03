@@ -16,17 +16,21 @@ int main(int argc, char *argv[])
 	string			main_config_file_path;
 	string			profile_path;
 	string			source_name;
+	string			result_name;
 
-	if (argc != 4)	{
+	if (argc != 5)	{
 		checker_assert(false);		
 	}
 	checker::get_full_path_name(argv[1], main_config_file_path);
 	checker::get_full_path_name(argv[2], profile_path);
-	source_name				=	argv[3];
-	
-	checker::verdict v = checker::check(main_config_file_path, profile_path, source_name);
-	cout << checker::serizlize(v) << endl;
+	source_name				  = argv[3];
+	result_name               = argv[4];
 
+	checker::verdict v = checker::check(main_config_file_path, profile_path, source_name);
+
+	ofstream fout(result_name);
+	fout << checker::serizlize(v) << endl;
+	fout.close();
 	return 0;
 }
 
