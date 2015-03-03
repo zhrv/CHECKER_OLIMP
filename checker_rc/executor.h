@@ -9,6 +9,7 @@
 #include <list>
 
 #include <windows.h>	// CreateProcess, GetExitCodeProcess, GetTickCount.
+#define PSAPI_VERSION 1
 #include <Psapi.h>		// GetProcessMemoryInfo. Подключить Psapi.lib
 
 //todo:

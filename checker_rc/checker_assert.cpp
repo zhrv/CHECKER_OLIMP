@@ -2,9 +2,9 @@
 
 void _checker_assert(const bool expression, const char *_File, long line) {
 	if (expression == false) {
-#if _DEBUG
+//#if _DEBUG
 		std::cout << "Assertion failed: false, file " << _File << ", line " << __LINE__ << std::endl;
-#endif
+//#endif
 		exit(1);
 	}
 }
