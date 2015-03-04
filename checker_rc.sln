@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "checker_rc", "checker_rc\checker_rc.vcxproj", "{5BE6DEB2-3DCD-414C-BF0E-3763EC69F206}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "contester", "contester\contester.vcxproj", "{826A9194-6CA8-4007-B14E-99B62D24C885}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Win32 = CD_ROM|Win32
@@ -24,6 +26,16 @@ Global
 		{5BE6DEB2-3DCD-414C-BF0E-3763EC69F206}.Release|Win32.Build.0 = Release|Win32
 		{5BE6DEB2-3DCD-414C-BF0E-3763EC69F206}.SingleImage|Win32.ActiveCfg = Release|Win32
 		{5BE6DEB2-3DCD-414C-BF0E-3763EC69F206}.SingleImage|Win32.Build.0 = Release|Win32
+		{826A9194-6CA8-4007-B14E-99B62D24C885}.CD_ROM|Win32.ActiveCfg = Release|Win32
+		{826A9194-6CA8-4007-B14E-99B62D24C885}.CD_ROM|Win32.Build.0 = Release|Win32
+		{826A9194-6CA8-4007-B14E-99B62D24C885}.Debug|Win32.ActiveCfg = Debug|Win32
+		{826A9194-6CA8-4007-B14E-99B62D24C885}.Debug|Win32.Build.0 = Debug|Win32
+		{826A9194-6CA8-4007-B14E-99B62D24C885}.DVD-5|Win32.ActiveCfg = Debug|Win32
+		{826A9194-6CA8-4007-B14E-99B62D24C885}.DVD-5|Win32.Build.0 = Debug|Win32
+		{826A9194-6CA8-4007-B14E-99B62D24C885}.Release|Win32.ActiveCfg = Release|Win32
+		{826A9194-6CA8-4007-B14E-99B62D24C885}.Release|Win32.Build.0 = Release|Win32
+		{826A9194-6CA8-4007-B14E-99B62D24C885}.SingleImage|Win32.ActiveCfg = Release|Win32
+		{826A9194-6CA8-4007-B14E-99B62D24C885}.SingleImage|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
