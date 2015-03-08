@@ -1,116 +1,26 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <ctime>
-#include "mysql.h"
-#include <assert.h>
+#include "data.h"
+#include "document.h"
+#include <windows.h>
 
-const clock_t	DELAY		= 5000;
+clock_t DELAY = 10000;
 
-typedef std::vector<int> indexes;
-
-struct db
-{
-	typedef std::vector<MYSQL_ROW> rows;
-
-	static MYSQL *conn;
-	static MYSQL mysql;
-
-
-
-	static void connect(std::string host, std::string user, std::string passwd, std::string table, int port);
-
-	static rows q(std::string sql);
-
-	static void close() { mysql_close(db::conn); }
-
-};
-MYSQL *db::conn = 0;
-MYSQL  db::mysql;
-
-
-struct exception
-{
-	exception(std::string msg) : message(msg) {}
-	std::string get_message() { return message; }
-	std::string message;
-};
-
-
-struct test
-{
-	test(MYSQL *conn);
-	~test(){}
-};
-typedef std::auto_ptr<test> ptest;
-typedef std::vector<test> tests_vector;
-
-
-struct task
-{
-	task(MYSQL *conn);
-	~task(){}
-	tests_vector tests;
-};
-typedef std::auto_ptr<task> ptask;
-
-
-
-struct solution
-{
-	solution(int id);
-	~solution();
-
-	std::string create_src(std::string name);
-	void delete_src(std::string name);
-
-	std::string get_cfg_json();
-	std::string create_cfg_json(std::string name);
-	void delete_cfg_json(std::string name);
-	std::string get_src_ext();
-
-	static indexes get_not_checked_ids();
-
-
-	ptask task;
-};
-typedef std::auto_ptr<solution> psolution;
-
-struct checker
-{
-	struct result
-	{
-		std::string json;
-	};
-
-	checker(psolution ps, std::string src_name, std::string cfg_name);
-	void run();
-	result get_result() { return res; }
-
-	void save_result_to_db(){}
-
-	psolution sol;
-	result res;
-	std::string src, cfg;
-};
-typedef std::auto_ptr<checker> pchecker;
-
-
-
+void print_version();
+void read_config();
 
 int main(int argc, char** argv)
 {
+	print_version();
+	read_config();
 
+	try {
+		db::init("localhost", "root", "", "projects_contest", 3306);
+		db::connect();
+	}
+	catch (exception e) {
+		std::cerr << "DB connection error: " <<  e.get_message() << std::endl;
+		return EXIT_FAILURE;
+	}
 
-	std::string cmd = "checker_rc.exe solution.json . solution.pas";
-	system(cmd.c_str());
-
-	
-	return EXIT_SUCCESS;
-
-	db::connect("localhost", "root", "", "projects_contest", 3306);
-	
 	while (1) {
 		clock_t start_time = clock();
 		
@@ -118,9 +28,8 @@ int main(int argc, char** argv)
 		for (indexes::iterator it = ind.begin(); it != ind.end(); it++) {
 			try {
 				psolution ps(new solution(*it));
-				checker ch(ps, "solution", "solution.json");
+				checker ch(ps, "solution", "solution.json", "result.json");
 				ch.run();
-				ch.save_result_to_db();
 			}
 			catch (exception e) {
 				std::cerr << "solution #" << *it << ": " << e.get_message() << std::endl;
@@ -129,13 +38,15 @@ int main(int argc, char** argv)
 		
 
 		clock_t end_time = start_time+DELAY;
-		while (clock() < end_time);
+		if (clock() < end_time) {
+			Sleep(DELAY - (clock() - start_time));
+		}
 		
 	}
 	
 	db::close();
 	
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 
@@ -148,109 +59,37 @@ int main(int argc, char** argv)
 
 
 
-
-
-/**
- *	struct db
- */
-
-void db::connect(std::string host, std::string user, std::string passwd, std::string table, int port)
+void print_version()
 {
-	mysql_init(&db::mysql);
-	//connection = mysql_real_connect(&mysql,"host","user",
-	//                   "password","database",port,"unix_socket",clientflag);
-	db::conn = mysql_real_connect(&db::mysql, "localhost", "root", "", "projects_contest", 3306, 0, 0);
-	if (db::conn == NULL) {
-		throw exception(mysql_error(&db::mysql));
-	}
+	std::cout << "Contester for programming olimpiads" << std::endl;
+	std::cout << "(C) V. Salnikov and R.Zhalnin (Mordovian State University, Russia)" << std::endl;
+	std::cout << "Version 0.0.1dev" << std::endl << std::endl;
 }
 
-
-db::rows db::q(std::string sql)
+void read_config() 
 {
-	MYSQL_RES *result;
-	MYSQL_ROW row;
-
-	int query_state;	query_state = mysql_query(db::conn, sql.c_str());
-	if (query_state != 0) {
-		throw exception(mysql_error(db::conn));
-	}
-
-	db::rows r;
-	result = mysql_store_result(db::conn);
-	while ((row = mysql_fetch_row(result)) != NULL) {
-		r.push_back(row);
-	}
-	mysql_free_result(result);
-
-	return r;
-}
-
-
-/**
- *	struct solution
- */
-
-solution::solution(int id)
-{
-	db::rows r = db::q("select * from solutions where id = " + id);
-	if (r.size() > 0) {
-
-	}
-	else {
-		throw exception(std::string("solution #" + id) + " not exist");
-	}
-}
-
-
-solution::~solution()
-{
-
-}
-
-std::string solution::get_cfg_json()
-{
-	assert(false); // @todo
-	return "";
-}
-
-std::string solution::get_src_ext()
-{
-	assert(false); // @todo
-	return ".cpp";
-}
-
-indexes solution::get_not_checked_ids()
-{
-	assert(false); // @todo
-	indexes result;
-	return result;
-}
-
-std::string solution::create_src(std::string name)
-{
-	assert(false); // @todo 
-	return "";
-}
-
-std::string solution::create_cfg_json(std::string name)
-{
-	return "";
-}
-
-/**  
- *	struct checker 
- */
-checker::checker(psolution ps, std::string src_name, std::string cfg_name) : sol(ps), src(src_name), cfg(cfg_name)
-{
-	src += sol->get_src_ext();
-}
-
-void checker::run()
-{
-
-	sol->create_src(src);
-	sol->create_cfg_json(cfg);
-	std::string cmd = "checker.exe " + cfg + " . " + src;
-	system(cmd.c_str());
+	stdstr str;
+	char ch;
+	str.clear();
+	std::ifstream f("contester.cfg");
+	while (f.get(ch)) str += ch;
+	f.close();
+	const char* json = str.c_str();
+	rapidjson::Document doc;
+	doc.Parse(json);
+	DELAY = doc["delay"].GetInt();
+	checker::ch_bin = doc["checker"].GetString();
+	checker::tests_dir = doc["tests_dir"].GetString();
+	if (doc["langs"].IsArray()) {
+		checker::clngs.clear();
+		const rapidjson::Value& lv = doc["langs"];
+		rapidjson::SizeType lv_size = lv.Size();
+		for (rapidjson::SizeType i = 0; i < lv_size; ++i) {
+			const rapidjson::Value& li = lv[i];
+			checker::clng lng;
+			lng.cmd = li["compiler"].GetString();
+			lng.ext = li["ext"].GetString();
+			checker::clngs[li["id"].GetString()] = lng;
+		}
+	} 
 }

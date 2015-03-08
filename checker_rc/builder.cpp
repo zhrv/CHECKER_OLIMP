@@ -159,8 +159,8 @@ bool build_from_source(const std::string& profile_path, const std::string& sourc
 
 		auto it = buffer_str.find(ok_str, 0);
 		if (it == std::string::npos)			return false;
-		it = buffer_str.find(ok_str, it + ok_str.length());
-		if (it == std::string::npos)			return false;
+		//it = buffer_str.find(ok_str, it + ok_str.length());
+		//if (it == std::string::npos)			return false;
 
 		buffer_str = source_name;
 		if (buffer_str.length() < 5
